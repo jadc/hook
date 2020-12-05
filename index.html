@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Webhook Spammer</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <main>
+            <p>Webhook URL<br><input type="url"></input></p>
+            <p>Message<br><input type="text"></input></p>
+            <p>Rate (ms)<br><input type="number" min="0" step="250" value="2000"></input></p>
+            <p>Cooldown (ms)<br><input type="number" min="0" step="250" value="30000"></input></p>
+            <button onclick="save()">Save</button>
+            <button onclick="submit()">Start</button>
+        </main>
+        <code></code>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
