@@ -46,8 +46,8 @@ let send = _ => {
                 log("SYS", "Taking a " + cooldown + "ms break...");
                 setTimeout(send, cooldown);
             }else {
-                if(e.status == 404) log(e.status, "Webhook not found.");
-                if(e.status == 0) log(e.status, "AJAX request failed.");
+                if(e.status == 404) log(e.status, "Webhook not found");
+                if(e.status == 0) log(e.status, "AJAX request failed");
                 log("SYS", "Reattempting...");
                 setTimeout(send, rate);
             }
