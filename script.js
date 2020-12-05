@@ -26,7 +26,7 @@ let submit = _ => {
     rate = $("input")[2].value;
     cooldown = $("input")[3].value;
 
-    log("Attempting to send '" + msg + "' to '" + url + "' every " + rate + "ms")
+    log("SYS", "Attempting to send '" + msg + "' to '" + url + "' every " + rate + "ms")
     send();
 }
 
@@ -34,24 +34,33 @@ let send = _ => {
     $("button")[1].disabled = true;
 
     $.ajax({
-        type: "POST",
-        url: url,
-        async: true,
+        type: "POST", url: url, async: true,
         data: { content: msg },
         complete: e => {
             if(e.status == 204){
                 counter++;
-                log("["+e.status+"] Sent " + counter.toLocaleString() + " messages");
+                log(e.status, "Sent " + counter.toLocaleString() + " messages");
                 setTimeout(send, rate);
-            }else{
-                log("["+e.status+"] Error! (typically rate limit) Taking a " + cooldown + "ms break...");
+            }else if(e.status == 429){
+                log(e.status, "You are being rate-limited");
+                log("SYS", "Taking a " + cooldown + "ms break...");
                 setTimeout(send, cooldown);
+            }else {
+                if(e.status == 404) log(e.status, "Webhook not found.");
+                if(e.status == 0) log(e.status, "AJAX request failed.");
+                log("SYS", "Reattempting...");
+                setTimeout(send, rate);
             }
         }
     });
 }
 
-let log = l => {
+let logtext = [];
+let log = (code, log) => {
     let day = new Date().toString().split(" ")[4];
-    $("code").prepend("<p><b>" + day + "</b> -- " + l + "</p>");
+    logtext.unshift("<b>" + day + "</b> -- [" + code + "] " + log);
+    if(logtext.length > 50) logtext.pop();
+    $("code").html(logtext.join("<br>"));
 }
+
+
